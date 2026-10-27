@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Smart Trip Planner</title>
+{% load static %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+font-family:Arial;
+background:#f4f6fb;
+margin:0;
+}
+
+/* Header */
+
+.header{
+background:#0f4c75;
+color:white;
+padding:15px;
+text-align:center;
+font-size:22px;
+font-weight:bold;
+}
+
+/* Container */
+
+.container{
+width:500px;
+margin:60px auto;
+background:white;
+padding:30px;
+border-radius:12px;
+box-shadow:0 6px 20px rgba(0,0,0,0.2);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+/* Inputs */
+
+input{
+width:100%;
+padding:10px;
+margin:10px 0;
+border:1px solid #ccc;
+border-radius:6px;
+}
+
+button{
+width:100%;
+padding:12px;
+background:#ff7b00;
+color:white;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-size:16px;
+}
+
+/* Options */
+
+.option-grid{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.option-btn{
+    padding:15px;
+    background:#0f4c75;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+    font-size:15px;
+    text-align:center;
+    transition:0.3s;
+    }
+    
+    .option-btn i{
+    font-size:25px;
+    display:block;
+    margin-bottom:5px;
+    }
+    
+    /* hover effect */
+    .option-btn:hover{
+    background:#ff7b00;
+    }
+    
+    /* selected option */
+    .option-btn.active{
+    background:#ff7b00;
+    color:white;
+    box-shadow:0 4px 10px rgba(0,0,0,0.3);
+    }
+
+/* Result Cards */
+
+.card{
+background:#eef3f8;
+border-radius:10px;
+overflow:hidden;
+margin-top:20px;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.card img{
+width:100%;
+height:160px;
+object-fit:cover;
+}
+
+.card-content{
+padding:15px;
+}
+
+.hidden{
+display:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<i class="fa-solid fa-earth-asia"></i> Smart Trip Planner
+</div>
+
+<div class="container">
+
+<h2>Plan Your Trip</h2>
+
+<!-- STEP 1 -->
+
+<div id="step1">
+
+<input type="text" id="destination" placeholder="Enter Destination">
+
+<input type="number" id="days" placeholder="Number of Days">
+
+<button onclick="nextStep()">Continue</button>
+
+</div>
+
+<!-- STEP 2 -->
+
+<div id="step2" class="hidden">
+
+<h3>Select Budget</h3>
+
+<div class="option-grid">
+
+<button class="option-btn" onclick="selectBudget('Budget Friendly')">
+<i class="fa-solid fa-wallet"></i>
+Budget
+</button>
+
+<button class="option-btn" onclick="selectBudget('Moderate')">
+<i class="fa-solid fa-coins"></i>
+Moderate
+</button>
+
+<button class="option-btn" onclick="selectBudget('Luxury')">
+<i class="fa-solid fa-gem"></i>
+Luxury
+</button>
+
+</div>
+
+</div>
+
+<!-- STEP 3 -->
+
+<div id="step3" class="hidden">
+
+<h3>Travel Type</h3>
+
+<div class="option-grid">
+
+<button class="option-btn" onclick="generatePlan('Solo')">
+<i class="fa-solid fa-user"></i>
+Solo
+</button>
+
+<button class="option-btn" onclick="generatePlan('Couple')">
+<i class="fa-solid fa-heart"></i>
+Couple
+</button>
+
+<button class="option-btn" onclick="generatePlan('Family')">
+<i class="fa-solid fa-people-roof"></i>
+Family
+</button>
+
+<button class="option-btn" onclick="generatePlan('Friends')">
+<i class="fa-solid fa-user-group"></i>
+Friends/Group
+</button>
+
+</div>
+
+</div>
+
+<!-- STEP 4 -->
+
+<div id="step4" class="hidden">
+
+<h3>Recommended Packages</h3>
+
+<div id="result"></div>
+
+</div>
+
+</div>
+
+<script>
+
+let destination=""
+let days=""
+let budget=""
+
+function nextStep(){
+
+destination=document.getElementById("destination").value
+days=document.getElementById("days").value
+
+if(destination=="" || days==""){
+alert("Please enter destination and days")
+return
+}
+
+document.getElementById("step1").style.display="none"
+document.getElementById("step2").style.display="block"
+
+}
+
+function selectBudget(value){
+
+budget=value
+
+document.getElementById("step2").style.display="none"
+document.getElementById("step3").style.display="block"
+
+}
+
+function generatePlan(type){
+
+document.getElementById("step3").style.display="none"
+document.getElementById("step4").style.display="block"
+
+let image="/static/images/goa.jpg"
+
+if(destination.toLowerCase()=="manali"){
+image="/static/images/manali.jpg"
+}
+
+if(destination.toLowerCase()=="kashmir"){
+image="/static/images/kashmir.jpg"
+}
+
+if(destination.toLowerCase()=="jaipur"){
+image="/static/images/jaipur.jpg"
+}
+
+let resultHTML = `
+<div class="card">
+
+<img src="${image}">
+
+<div class="card-content">
+
+<h3>${destination} Tour Package</h3>
+
+<p><i class="fa-solid fa-calendar"></i> ${days} Days</p>
+
+<p><i class="fa-solid fa-wallet"></i> ${budget}</p>
+
+<p><i class="fa-solid fa-users"></i> ${type}</p>
+
+<p><b>Price: ₹${Math.floor(Math.random()*20000)+5000}</b></p>
+
+</div>
+
+</div>
+`
+
+document.getElementById("result").innerHTML=resultHTML
+
+}
+
+</script>
+
+</body>
+</html>

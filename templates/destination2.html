@@ -1,0 +1,430 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Destinations</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+    font-family:Arial;
+    margin:0;
+    background:#f5f7fb;
+}
+
+.header{
+    background:#0f4c75;
+    color:white;
+    padding:15px;
+    text-align:center;
+}
+
+.filters{
+    display:flex;
+    justify-content:center;
+    gap:10px;
+    flex-wrap:wrap;
+    margin:20px;
+}
+
+.filters input, .filters select{
+    padding:10px;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+
+.destination-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:25px;
+    padding:40px;
+}
+
+.card{
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    position:relative;
+
+}
+
+/* SLIDER */
+.slider{
+    position:relative;
+    height:350px;
+    overflow:hidden;
+}
+.slide{
+    width:100%;
+    height:350px;   /* match slider height */
+    object-fit:cover;
+    position:absolute;
+    opacity:0;
+    transition:1s;
+}
+
+.slide.active{
+    opacity:1;
+}
+
+/* ARROWS */
+.arrow{
+    position:absolute;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(0,0,0,0.5);
+    color:white;
+    border:none;
+    padding:5px 10px;
+    cursor:pointer;
+    z-index:2;
+}
+
+.prev{ left:5px; }
+.next{ right:5px; }
+
+/* DOTS */
+.dots{
+    position:absolute;
+    bottom:5px;
+    width:100%;
+    text-align:center;
+}
+
+.dot{
+    height:8px;
+    width:8px;
+    margin:2px;
+    display:inline-block;
+    background:#ccc;
+    border-radius:50%;
+    cursor:pointer;
+}
+
+.dot.active{
+    background:#ff7b00;
+}
+
+.card h3{ padding:10px; margin:0; }
+.card p{ padding:0 10px 10px; }
+
+.card button{
+    margin:10px;
+    padding:10px;
+    background:#ff7b00;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+#noResult{
+    text-align:center;
+    display:none;
+    color:red;
+}
+.fav-icon{
+    position:absolute;
+    top:10px;
+    right:10px;
+    background:white;
+    border-radius:50%;
+    padding:8px;
+    cursor:pointer;
+    z-index:5;
+    box-shadow:0 2px 5px rgba(0,0,0,0.2);
+}
+
+.fav-icon i{
+    color:#888;
+    font-size:18px;
+}
+
+.fav-icon.active i{
+    color:red;
+}
+</style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h2>Popular Destinations</h2>
+    
+        {% if user.is_authenticated %}
+            <p style="margin-top:5px;">👋 Welcome, {{ user.username }}</p>
+        {% else %}
+            <a href="/ulogin" style="color:white;">Login</a>
+        {% endif %}
+    </div>
+
+<div class="filters">
+
+<input type="text" id="searchInput" placeholder="Search..." onkeyup="applyFilters()">
+<button type="button" onclick="startSpeech()">
+    🎤 Speak
+</button>
+{% comment %} <select id="budget" onchange="applyFilters()">
+<option value="">Budget</option>
+<option value="2000">Below 2000</option>
+<option value="3000">Below 3000</option>
+<option value="5000">Below 5000</option>
+</select>
+
+<select id="rating" onchange="applyFilters()">
+<option value="">Rating</option>
+<option value="4">4+ Stars</option>
+<option value="4.5">4.5+ Stars</option>
+</select> {% endcomment %}
+
+<select id="type" onchange="applyFilters()">
+<option value="">Type</option>
+<option value="beach">Beach</option>
+<option value="hill">Hill</option>
+<option value="city">City</option>
+</select>
+
+</div>
+
+<div class="destination-grid">
+
+{% for d in destinations %}
+<div class="card" data-type="{{ d.type }}">
+    <div class="fav-icon" onclick="toggleWishlist(this, '{{ d.id }}')">
+        <i class="fa-regular fa-heart"></i>
+    </div>
+    <div class="slider">
+
+        {% for img in d.images.all %}
+        <img src="{{ img.image.url }}" class="slide">
+        {% empty %}
+        <img src="{% static 'images/default.jpg' %}" class="slide active">
+        {% endfor %}
+
+        <!-- ARROWS -->
+        <button class="arrow prev">❮</button>
+        <button class="arrow next">❯</button>
+
+        <!-- DOTS -->
+        <div class="dots"></div>
+
+    </div>
+
+    <h3>{{ d.name }} | {{ d.type }}</h3>
+    
+
+    {% comment %} <a href="/places?place={{ d.name }}">
+        <button>Explore</button>
+    </a> {% endcomment %}
+    <a href="{% url 'destination_detail' d.id %}">
+        <button>View Details</button>
+    </a>
+</div>
+{% endfor %}
+
+</div>
+
+<p id="noResult">No destinations found 😢</p>
+
+<script>
+
+/* FILTER */
+function applyFilters(){
+    let search = document.getElementById("searchInput").value.toLowerCase();
+    let type = document.getElementById("type").value;
+
+    let cards = document.getElementsByClassName("card");
+    let visible = 0;
+
+    for(let i=0; i<cards.length; i++){
+
+        let title = cards[i].getElementsByTagName("h3")[0].innerText.toLowerCase();
+        let cardType = cards[i].getAttribute("data-type");
+
+        let show = true;
+
+        // 🔍 Search filter
+        if(search && !title.includes(search)){
+            show = false;
+        }
+
+        // 🌍 Type filter
+        if(type && cardType !== type){
+            show = false;
+        }
+
+        if(show){
+            cards[i].style.display = "block";
+            visible++;
+        }else{
+            cards[i].style.display = "none";
+        }
+    }
+
+    document.getElementById("noResult").style.display = visible ? "none" : "block";
+}
+/* SLIDER LOGIC */
+document.querySelectorAll(".slider").forEach(slider=>{
+
+    let slides = slider.querySelectorAll(".slide");
+    let prev = slider.querySelector(".prev");
+    let next = slider.querySelector(".next");
+    let dotsContainer = slider.querySelector(".dots");
+
+    let index=0;
+    let interval;
+
+    // create dots
+    slides.forEach((_,i)=>{
+        let dot=document.createElement("span");
+        dot.classList.add("dot");
+        if(i===0) dot.classList.add("active");
+        dotsContainer.appendChild(dot);
+
+        dot.addEventListener("click",()=>{
+            showSlide(i);
+        });
+    });
+
+    let dots = slider.querySelectorAll(".dot");
+
+    function showSlide(i){
+        slides[index].classList.remove("active");
+        dots[index].classList.remove("active");
+
+        index=i;
+
+        slides[index].classList.add("active");
+        dots[index].classList.add("active");
+    }
+
+    function nextSlide(){
+        showSlide((index+1)%slides.length);
+    }
+
+    function prevSlide(){
+        showSlide((index-1+slides.length)%slides.length);
+    }
+
+    next.onclick = nextSlide;
+    prev.onclick = prevSlide;
+
+    function start(){
+        interval=setInterval(nextSlide,2500);
+    }
+
+    function stop(){
+        clearInterval(interval);
+    }
+
+    slider.addEventListener("mouseenter",stop);
+    slider.addEventListener("mouseleave",start);
+
+    // init
+    slides[0].classList.add("active");
+    start();
+
+});
+
+</script>
+<script>
+
+    // load wishlist from localStorage
+    let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
+    
+    function toggleWishlist(element, id){
+    
+        id = String(id);
+    
+        if(wishlist.includes(id)){
+            // remove
+            wishlist = wishlist.filter(item => item !== id);
+            element.classList.remove("active");
+        }else{
+            // add
+            wishlist.push(id);
+            element.classList.add("active");
+        }
+    
+        localStorage.setItem("wishlist", JSON.stringify(wishlist));
+    }
+    
+    // ✅ Show active hearts on page load
+    window.onload = function(){
+    
+        document.querySelectorAll(".fav-icon").forEach(icon=>{
+            let id = icon.getAttribute("onclick").match(/'(\d+)'/)[1];
+    
+            if(wishlist.includes(id)){
+                icon.classList.add("active");
+            }
+        });
+    
+    };
+    
+    </script>
+
+    <script>
+        function startSpeech() {
+        
+            const SpeechRecognition =
+                window.SpeechRecognition || window.webkitSpeechRecognition;
+        
+            if (!SpeechRecognition) {
+                alert("Speech recognition is not supported in this browser. Please use Google Chrome.");
+                return;
+            }
+        
+            const recognition = new SpeechRecognition();
+        
+            recognition.lang = "en-IN";
+            recognition.interimResults = false;
+            recognition.continuous = false;
+        
+            recognition.onstart = function () {
+                console.log("Listening...");
+            };
+        
+            recognition.onresult = function (event) {
+        
+                const text = event.results[0][0].transcript;
+        
+                document.getElementById("searchInput").value = text;
+        
+                // Automatically apply destination search
+                applyFilters();
+            };
+        
+            recognition.onerror = function (event) {
+        
+                console.log("Speech error:", event.error);
+        
+                if (event.error === "not-allowed") {
+                    alert(
+                        "Microphone permission is blocked. " +
+                        "Please allow microphone access for this website and try again."
+                    );
+                }
+                else if (event.error === "no-speech") {
+                    alert("No speech detected. Please try speaking again.");
+                }
+                else if (event.error === "audio-capture") {
+                    alert("No microphone was detected. Please check your microphone.");
+                }
+                else {
+                    alert("Speech recognition error: " + event.error);
+                }
+            };
+        
+            recognition.onend = function () {
+                console.log("Speech recognition ended.");
+            };
+        
+            recognition.start();
+        }
+        </script>
+</body>
+</html>

@@ -1,0 +1,94 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<style>
+body{
+    font-family:Arial;
+    background:#f5f7fb;
+    margin:0;
+    padding:20px;
+}
+
+h2{
+    text-align:center;
+    color:#0f4c75;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+th, td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+}
+
+th{
+    background:#0f4c75;
+    color:white;
+}
+
+img{
+    width:80px;
+    height:60px;
+    object-fit:cover;
+    border-radius:5px;
+}
+
+.btn{
+    padding:6px 12px;
+    text-decoration:none;
+    border-radius:5px;
+    color:white;
+}
+
+.edit{
+    background:#3282b8;
+}
+
+.delete{
+    background:red;
+}
+</style>
+
+<h2>All Destinations</h2>
+
+<table>
+<tr>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Distance</th>
+    <th>Type</th>
+    <th>Image</th>
+    <th>Actions</th>
+</tr>
+
+{% for d in destinations %}
+<tr>
+    <td>{{ d.name }}</td>
+    <td>{{ d.description|truncatewords:10 }}</td>
+    <td>{{ d.distance }} km</td>
+    <td>{{ d.type }}</td>
+
+    <td>
+        {% if d.images.first %}
+            <img src="{{ d.images.first.image.url }}">
+        {% endif %}
+    </td>
+
+    <td>
+        <a href="{% url 'edit_destination' d.id %}" class="btn edit">Edit</a>
+        <a href="{% url 'delete_destination' d.id %}" class="btn delete"
+           onclick="return confirm('Delete this destination?')">Delete</a>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

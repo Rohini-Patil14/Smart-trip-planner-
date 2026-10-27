@@ -1,0 +1,106 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<style>
+    body{
+        font-family: Arial;
+        background:#f4f7fb;
+    }
+
+    .container{
+        width:90%;
+        margin:30px auto;
+    }
+
+    h2{
+        text-align:center;
+        color:#0f4c75;
+    }
+
+    form{
+        text-align:center;
+        margin-bottom:20px;
+    }
+
+    input, select, button{
+        padding:8px;
+        margin:5px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        background:white;
+    }
+
+    th, td{
+        padding:10px;
+        border:1px solid #ccc;
+        text-align:center;
+    }
+
+    th{
+        background:#0f4c75;
+        color:white;
+    }
+
+    tr:hover{
+        background:#f1f1f1;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Destination Report</h2>
+
+<!-- 🔍 Search + Filter Form -->
+<form method="GET">
+
+<!-- Search Box -->
+<input type="text" name="q" placeholder="Search destination..." value="{{ request.GET.q }}">
+
+<!-- Filter Dropdown -->
+<select name="type">
+    <option value="">All Types</option>
+    <option value="beach" {% if request.GET.type == 'beach' %}selected{% endif %}>Beach</option>
+    <option value="city" {% if request.GET.type == 'city' %}selected{% endif %}>City</option>
+    <option value="hill" {% if request.GET.type == 'hill' %}selected{% endif %}>Hill</option>
+</select>
+
+<!-- Submit Button -->
+<button type="submit">Search</button>
+
+</form>
+
+<!-- 📊 Table -->
+<table>
+<tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Description</th>
+    {% comment %} <th>Distance (KM)</th> {% endcomment %}
+    <th>Type</th>
+</tr>
+
+{% for d in destinations %}
+<tr>
+    <td>{{ d.id }}</td>
+    <td>{{ d.name }}</td>
+    <td>{{ d.description }}</td>
+    {% comment %} <td>{{ d.distance }}</td> {% endcomment %}
+    <td>{{ d.type|title }}</td>
+</tr>
+{% empty %}
+<tr>
+    <td colspan="5">No destinations found</td>
+</tr>
+{% endfor %}
+</table>
+
+</div>
+
+{% endblock %}

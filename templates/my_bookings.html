@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Bookings</title>
+
+    <style>
+        body{
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #eef2f3, #dfe9f3);
+            margin:0;
+            padding:0;
+        }
+
+        h2{
+            text-align:center;
+            padding:20px;
+            color:#0f4c75;
+        }
+
+        .container{
+            width:90%;
+            max-width:900px;
+            margin:auto;
+        }
+
+        /* 🔥 POLICY BOX */
+        .policy{
+            background:#fff3cd;
+            padding:15px;
+            border-radius:10px;
+            margin:20px auto;
+            max-width:900px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .policy h3{
+            margin-top:0;
+            color:#856404;
+        }
+
+        .card{
+            background:white;
+            padding:20px;
+            margin:20px 0;
+            border-radius:15px;
+            box-shadow:0 8px 25px rgba(0,0,0,0.1);
+            transition:0.3s;
+        }
+
+        .card:hover{
+            transform:translateY(-5px);
+        }
+
+        .top{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .status{
+            padding:5px 12px;
+            border-radius:20px;
+            font-size:12px;
+            color:white;
+        }
+
+        .booked{
+            background:#28a745;
+        }
+
+        .cancelled{
+            background:#dc3545;
+        }
+
+        .row{
+            display:flex;
+            justify-content:space-between;
+            margin:8px 0;
+            font-size:14px;
+        }
+
+        .label{
+            color:#555;
+        }
+
+        .value{
+            font-weight:bold;
+            color:#333;
+        }
+
+        .amount{
+            text-align:right;
+            margin-top:10px;
+            font-size:18px;
+            color:#ff7b00;
+            font-weight:bold;
+        }
+
+        .refund{
+            color:green;
+            font-weight:bold;
+            margin-top:5px;
+            text-align:right;
+        }
+
+        .btn{
+            display:inline-block;
+            margin-top:10px;
+            padding:8px 15px;
+            background:#dc3545;
+            color:white;
+            text-decoration:none;
+            border-radius:6px;
+            font-size:13px;
+        }
+
+        .btn:hover{
+            background:#a71d2a;
+        }
+
+        .no-data{
+            text-align:center;
+            margin-top:50px;
+            color:red;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<h2>My Bookings</h2>
+
+<!-- 🔥 POLICY -->
+<div class="policy">
+    <h3>Cancellation Policy</h3>
+    <p>✔ Cancel before 3 days → 90% refund</p>
+    <p>✔ Cancel before 2 days → 50% refund</p>
+    <p>❌ Cancel before 1 day → No refund</p>
+</div>
+
+<div class="container">
+
+{% if bookings %}
+
+    {% for b in bookings %}
+    <div class="card">
+
+        <div class="top">
+            <h3>{{ b.destination.name }}</h3>
+
+            <span class="status {% if b.status == 'booked' %}booked{% else %}cancelled{% endif %}">
+                {{ b.status }}
+            </span>
+        </div>
+
+        <div class="row">
+            <span class="label">Vehicle:</span>
+            <span class="value">{{ b.vehicle.name }}</span>
+        </div>
+
+        <div class="row">
+            <span class="label">Hotel:</span>
+            <span class="value">
+                {% if b.hotel %}
+                    {{ b.hotel.name }}
+                {% else %}
+                    Not Selected
+                {% endif %}
+            </span>
+        </div>
+
+        <div class="row">
+            <span class="label">Travel Dates:</span>
+            <span class="value">{{ b.v_from }} → {{ b.v_to }}</span>
+        </div>
+
+        <div class="row">
+            <span class="label">Rooms:</span>
+            <span class="value">{{ b.rooms_booked }}</span>
+        </div>
+
+        <div class="amount">
+            ₹{{ b.total_amount }}
+        </div>
+
+        <!-- 🔥 REFUND -->
+        {% if b.status == "cancelled" %}
+            <div class="refund">
+                Refund: ₹{{ b.refund_amount }}
+            </div>
+        {% endif %}
+
+        <!-- 🔥 CANCEL BUTTON -->
+        {% if b.status == "booked" %}
+            <a href="{% url 'cancel_booking' b.id %}"
+               onclick="return confirm('Are you sure to cancel booking?')"
+               class="btn">
+                Cancel Booking
+            </a>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+{% else %}
+    <h3 class="no-data">No Bookings Found ❌</h3>
+{% endif %}
+
+</div>
+
+</body>
+</html>

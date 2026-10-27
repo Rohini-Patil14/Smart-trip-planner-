@@ -1,0 +1,42 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:center; align-items:center; min-height:80vh;">
+<div style="background:white; padding:30px; width:400px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.2);">
+
+<h2 style="text-align:center;">Edit Vehicle</h2>
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+
+<input type="text" name="name" value="{{ vehicle.name }}" style="width:100%; padding:10px; margin:10px 0;">
+
+<select name="type" style="width:100%; padding:10px; margin:10px 0;">
+    <option {% if vehicle.type == "Car" %}selected{% endif %}>Car</option>
+    <option {% if vehicle.type == "SUV" %}selected{% endif %}>SUV</option>
+    <option {% if vehicle.type == "Bus" %}selected{% endif %}>Bus</option>
+</select>
+
+<input type="number" name="seats" value="{{ vehicle.seats }}" style="width:100%; padding:10px; margin:10px 0;">
+<input type="number" name="price" value="{{ vehicle.price_per_km }}" style="width:100%; padding:10px; margin:10px 0;">
+
+<textarea name="description" style="width:100%; padding:10px; margin:10px 0;">{{ vehicle.description }}</textarea>
+
+<!-- SHOW IMAGE -->
+{% if vehicle.image %}
+    <img src="{{ vehicle.image.url }}" width="100%" style="border-radius:8px; margin-bottom:10px;">
+{% endif %}
+
+<input type="file" name="image">
+
+<button style="width:100%; padding:10px; background:#0f4c75; color:white; border:none; margin-top:10px;">
+Update
+</button>
+
+</form>
+
+</div>
+</div>
+
+{% endblock %}

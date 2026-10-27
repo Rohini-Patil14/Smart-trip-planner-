@@ -1,0 +1,44 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:center; align-items:center; min-height:80vh;">
+<div style="background:white; padding:30px; border-radius:10px; width:400px; box-shadow:0 5px 15px rgba(0,0,0,0.2);">
+
+<h2 style="text-align:center;">Edit Hotel</h2>
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+
+<label>Destination</label>
+<select name="destination" style="width:100%; padding:10px; margin:10px 0;">
+{% for d in destinations %}
+<option value="{{ d.id }}" {% if d.id == hotel.destination.id %}selected{% endif %}>
+    {{ d.name }}
+</option>
+{% endfor %}
+</select>
+
+<input type="text" name="name" value="{{ hotel.name }}" placeholder="Hotel Name" style="width:100%; padding:10px; margin:10px 0;">
+<input type="number" name="total_rooms" value="{{ hotel.total_rooms }}" placeholder="Total Rooms" style="width:100%; padding:10px; margin:10px 0;">
+<input type="number" name="price" value="{{ hotel.price }}" placeholder="Price" style="width:100%; padding:10px; margin:10px 0;">
+
+<!-- ✅ SHOW CURRENT IMAGE -->
+{% if hotel.image %}
+    <p>Current Image:</p>
+    <img src="{{ hotel.image.url }}" width="100%" style="border-radius:8px; margin-bottom:10px;">
+{% endif %}
+
+<!-- ✅ UPLOAD NEW IMAGE -->
+<input type="file" name="image" style="margin:10px 0;">
+
+<button style="width:100%; padding:10px; background:#0f4c75; color:white; border:none; border-radius:5px;">
+    Update
+</button>
+
+</form>
+
+</div>
+</div>
+
+{% endblock %}

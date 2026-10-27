@@ -1,0 +1,35 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<div style="display:flex; justify-content:center; align-items:center; height:80vh;">
+
+<div style="background:white; padding:30px; width:400px; border-radius:10px; box-shadow:0 5px 20px rgba(0,0,0,0.1);">
+
+<h2 style="text-align:center;">Edit User</h2>
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+
+<input type="text" name="username" value="{{ user.username }}" placeholder="Username"><br><br>
+
+<input type="email" name="email" value="{{ user.email }}" placeholder="Email"><br><br>
+
+<input type="text" name="phone" value="{{ profile.phone }}" placeholder="Phone"><br><br>
+
+<textarea name="address" placeholder="Address">{{ profile.address }}</textarea><br><br>
+
+{% if profile.photo %}
+    <img src="{{ profile.photo.url }}" width="80"><br><br>
+{% endif %}
+
+<input type="file" name="photo"><br><br>
+
+<button style="width:100%; padding:10px; background:#0f4c75; color:white;">Update</button>
+
+</form>
+
+</div>
+</div>
+
+{% endblock %}

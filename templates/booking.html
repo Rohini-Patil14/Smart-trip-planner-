@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Booking Summary</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#f5f7fb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+.card{
+    background:white;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+    width:400px;
+}
+
+h2{
+    text-align:center;
+    color:#0f4c75;
+}
+
+.btn{
+    display:block;
+    margin-top:20px;
+    text-align:center;
+    padding:10px;
+    background:#0f4c75;
+    color:white;
+    text-decoration:none;
+    border-radius:6px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Booking Summary</h2>
+<p><b>Travel Date:</b> {{ date }}</p>
+<p><b>Place:</b> {{ place }}</p>
+<p><b>Hotel:</b> {{ hotel|default:"Not Selected" }}</p>
+<p><b>Vehicle:</b> {{ vehicle }}</p>
+<p><b>Rate Used:</b> ₹{{ final_rate }}/km</p>
+<p><b>Distance:</b> {{ distance }} km</p>
+<p><b>Vehicle Price:</b> ₹{{ vprice }}/km</p>
+
+<a href="{% url 'payment' %}" class="btn">Proceed to Payment</a>
+
+</div>
+
+</body>
+</html>

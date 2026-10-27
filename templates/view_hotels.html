@@ -1,0 +1,76 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<style>
+h2{
+    text-align:center;
+    color:#0f4c75;
+}
+
+table{
+    width:100%;
+    border-collapse:collapse;
+    background:white;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+th, td{
+    padding:12px;
+    border-bottom:1px solid #ddd;
+    text-align:center;
+}
+
+th{
+    background:#0f4c75;
+    color:white;
+}
+
+img{
+    width:80px;
+    height:60px;
+    object-fit:cover;
+}
+
+.btn{
+    padding:6px 12px;
+    border-radius:5px;
+    color:white;
+    text-decoration:none;
+}
+
+.edit{ background:#3282b8; }
+.delete{ background:red; }
+</style>
+
+<h2>All Hotels</h2>
+
+<table>
+<tr>
+    <th>Destination</th>
+    <th>Name</th>
+    <th>Rooms</th>
+    <th>Price</th>
+    <th>Image</th>
+    <th>Action</th>
+</tr>
+
+{% for h in hotels %}
+<tr>
+    <td>{{ h.destination.name }}</td>
+    <td>{{ h.name }}</td>
+    <td>{{ h.total_rooms }}</td>
+    <td>₹{{ h.price }}</td>
+    <td><img src="{{ h.image.url }}"></td>
+
+    <td>
+        <a href="{% url 'edit_hotel' h.id %}" class="btn edit">Edit</a>
+        <a href="{% url 'delete_hotel' h.id %}" class="btn delete"
+           onclick="return confirm('Delete this hotel?')">Delete</a>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

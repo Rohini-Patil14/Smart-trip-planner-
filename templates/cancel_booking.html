@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cancel Booking</title>
+
+<style>
+body{
+    font-family: 'Segoe UI', Arial;
+    background: linear-gradient(to right, #e3f2fd, #ffffff);
+    margin:0;
+}
+
+/* Main Card */
+.container{
+    width:400px;
+    margin:80px auto;
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 8px 25px rgba(0,0,0,0.15);
+    text-align:center;
+    transition:0.3s;
+}
+
+.container:hover{
+    transform:translateY(-5px);
+}
+
+/* Heading */
+h2{
+    color:#0f4c75;
+    margin-bottom:20px;
+}
+
+/* Details */
+.details{
+    text-align:left;
+    margin-bottom:20px;
+}
+
+.details p{
+    margin:8px 0;
+    font-size:15px;
+}
+
+/* Status Badge */
+.status{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:20px;
+    font-size:13px;
+    background:#28a745;
+    color:white;
+}
+
+.cancelled{
+    background:red;
+}
+
+/* Button */
+.btn{
+    display:inline-block;
+    padding:12px 20px;
+    background:#ff4d4d;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+    font-size:16px;
+    transition:0.3s;
+}
+
+.btn:hover{
+    background:#cc0000;
+}
+
+/* Policy Box */
+.policy{
+    margin-top:20px;
+    padding:12px;
+    background:#fff3cd;
+    border-radius:8px;
+    font-size:14px;
+    text-align:left;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Booking Details</h2>
+
+<div class="details">
+    <p><b>Destination:</b> {{ booking.destination.name }}</p>
+    <p><b>Vehicle:</b> {{ booking.vehicle.name }}</p>
+    <p><b>Date:</b> {{ booking.travel_date }}</p>
+
+    <p><b>Status:</b> 
+        <span class="status {% if booking.status == 'cancelled' %}cancelled{% endif %}">
+            {{ booking.status }}
+        </span>
+    </p>
+</div>
+
+<!-- Cancel Button -->
+<a href="/cancel-booking/{{ booking.id }}/" class="btn">
+    Cancel Booking 
+</a>
+
+<!-- Policy -->
+<div class="policy">
+    ⚠️ <b>Cancellation Policy:</b><br><br>
+    ✔ Cancel before <b>10 days</b> → Full Refund<br>
+    ❌ Cancel within <b>10 days</b> → 50% deduction
+</div>
+
+</div>
+
+</body>
+</html>

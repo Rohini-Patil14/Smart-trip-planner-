@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Smart Trip Planner</title>
+{% load static %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+
+<style>
+
+body{
+margin:0;
+font-family:Arial, Helvetica, sans-serif;
+background:#f5f7fb;
+}
+
+/* Navbar */
+
+.navbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:15px 40px;
+background:#0f4c75;
+color:white;
+}
+
+.logo{
+font-size:24px;
+font-weight:bold;
+}
+
+.nav-links{
+display:flex;
+gap:30px;
+}
+
+.nav-links a{
+text-decoration:none;
+color:white;
+font-weight:500;
+}
+
+/* Hero Section */
+
+.hero{
+height:600px;
+background:url('/static/index4.png') center/cover no-repeat;
+display:flex;
+align-items:center;
+justify-content:center;
+flex-direction:column;
+color:black;
+text-align:center;
+}
+
+.hero h1{
+font-size:50px;
+margin-bottom:10px;
+}
+
+.hero p{
+font-size:20px;
+}
+
+/* Search Box */
+
+.search-box{
+background:white;
+padding:20px;
+border-radius:10px;
+margin-top:20px;
+display:flex;
+gap:15px;
+box-shadow:0 5px 20px rgba(0,0,0,0.2);
+}
+
+.search-box input{
+padding:10px;
+border:1px solid #ccc;
+border-radius:5px;
+}
+
+.search-box button{
+background:#ff7b00;
+color:white;
+border:none;
+padding:10px 20px;
+border-radius:5px;
+cursor:pointer;
+}
+
+/* Features */
+
+.features{
+padding:80px 10%;
+text-align:center;
+}
+
+.features h2{
+margin-bottom:40px;
+}
+
+.feature-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:30px;
+}
+
+.feature-card{
+background:white;
+padding:30px;
+border-radius:10px;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+
+}
+
+.feature-card i{
+font-size:40px;
+color:#0f4c75;
+margin-bottom:15px;
+
+}
+
+/* Destinations */
+
+.destinations{
+padding:80px 10%;
+background:#eef3f8;
+}
+
+.destination-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+}
+
+.destination-card{
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.destination-card img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.destination-card h3{
+padding:15px;
+}
+
+/* CTA */
+
+.cta{
+background:#0f4c75;
+color:white;
+text-align:center;
+padding:60px;
+}
+
+.cta button{
+margin-top:15px;
+padding:12px 25px;
+background:#ff7b00;
+border:none;
+border-radius:6px;
+color:white;
+cursor:pointer;
+}
+
+/* Footer */
+
+footer{
+background:#222;
+color:white;
+padding:40px 10%;
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+}
+
+footer a{
+color:#ccc;
+text-decoration:none;
+display:block;
+margin:5px 0;
+}
+.services{
+    padding:80px 10%;
+    text-align:center;
+    background:#fff;
+    }
+    
+    .services h2{
+    margin-bottom:40px;
+    }
+    
+    .service-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:30px;
+    }
+    
+    .service-card{
+    background:#f9fbff;
+    padding:30px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+    transition:0.3s;
+    }
+    
+    .service-card:hover{
+    transform:translateY(-8px);
+    }
+    
+    .service-card i{
+    font-size:40px;
+    color:#0f4c75;
+    margin-bottom:15px;
+    }
+    
+    .service-card button{
+    margin-top:10px;
+    padding:10px 20px;
+    background:#ff7b00;
+    border:none;
+    border-radius:6px;
+    color:white;
+    cursor:pointer;
+    }
+</style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+
+<nav class="navbar">
+<div class="logo">Smart Trip Planner</div>
+
+<div class="nav-links">
+    <a href="#">Home</a>
+    <a href="/destinations">Destinations</a>
+    <a href="/feedback">Feedback</a>
+    <a href="{% url 'how_it_works' %}" class="how-btn">How It Works</a>
+    {% comment %} <a href="/packages">Packages</a> {% endcomment %}
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+    
+    <!-- Login Icon -->
+    {% if user.is_authenticated %}
+    <a href="{% url 'my_bookings' %}" style="color:white;">
+        My Bookings
+    </a>
+<span style="color:white;">👋 {{ user.username }}</span>
+
+
+
+<a href="{% url 'user_logout' %}" onclick="return confirm('Logout?')">
+    <i class="fas fa-sign-out-alt"></i>
+</a>
+
+{% else %}
+
+<a href="/ulogin">
+    <i class="fas fa-user-circle"></i>
+</a>
+
+{% endif %}
+
+    </div>
+</nav>
+
+<!-- Hero -->
+
+<section class="hero">
+
+<h1>Plan Your Perfect Trip</h1>
+<p>Smart travel planning with personalized recommendations</p>
+
+{% comment %} <div class="search-box">
+
+<input type="text" placeholder="Where to go?">
+
+<input type="date">
+
+<input type="number" placeholder="Travelers">
+
+<button>Plan Trip</button>
+
+</div> {% endcomment %}
+
+</section>
+<section class="services">
+
+    <h2>Select Your Travel Services</h2>
+    
+    <div class="service-grid">
+    
+        <!-- Transport -->
+        <div class="service-card">
+            <i class="fas fa-car"></i>
+            <h3>Choose Transport</h3>
+            <p>Select vehicles based on your budget.</p>
+            <a href="/transport">
+                {% comment %} <button>Select</button> {% endcomment %}
+            </a>
+        </div>
+    
+        <!-- Hotel -->
+        <div class="service-card">
+            <i class="fas fa-hotel"></i>
+            <h3>Book Hotels</h3>
+            <p>Find best hotels with comfort and affordability.</p>
+            <a href="/hotels">
+                
+            </a>
+        </div>
+    
+        <!-- destination -->
+        <div class="service-card">
+            <i class="fas fa-map-marker-alt"></i>
+            <h3>Select Destination</h3>
+            <p>Explore and choose your favorite travel destination.</p>
+            <a href="/destinations">
+                
+            </a>
+        </div>
+    
+    </div>
+    
+    </section>
+<!-- Features -->
+
+<section class="features">
+
+<h2>Why Use Smart Trip Planner?</h2>
+
+<div class="feature-grid">
+
+<div class="feature-card">
+<i class="fas fa-map-marked-alt"></i>
+<h3>Smart Itinerary</h3>
+<p>Automatically generate the best travel plan for your trip.</p>
+</div>
+
+<div class="feature-card">
+<i class="fas fa-hotel"></i>
+<h3>Hotel Suggestions</h3>
+<p>Find the best hotels within your budget.</p>
+</div>
+
+
+<div class="feature-card">
+<i class="fas fa-wallet"></i>
+<h3>Budget Planning</h3>
+<p>Plan your trip according to your budget.</p>
+</div>
+
+</div>
+
+</section>
+
+<!-- Destinations -->
+
+{% comment %} <section class="destinations">
+
+<h2 style="text-align:center;margin-bottom:40px;">Popular Destinations</h2>
+
+<div class="destination-grid"> {% endcomment %}
+
+{% comment %} <div class="destination-card">
+<img src="/static/images/goa.jpg">
+<h3>Goa</h3>
+</div>
+
+<div class="destination-card">
+<img src="/static/images/manali.jpg">
+<h3>Manali</h3>
+</div>
+
+<div class="destination-card">
+<img src="/static/images/kashmir.jpg">
+<h3>Kashmir</h3>
+</div>
+
+<div class="destination-card">
+<img src="/static/images/jaipur.jpg">
+<h3>Jaipur</h3>
+</div> {% endcomment %}
+{% comment %} <div class="destination-card">
+    <img src="/static/images/goa.jpg">
+    <h3>Goa</h3>
+    <a href="/hotels?place=Goa">
+        <button>Select</button>
+    </a>
+</div>
+
+<div class="destination-card">
+    <img src="/static/images/manali.jpg">
+    <h3>Manali</h3>
+    <a href="/hotels?place=Manali">
+        <button>Select</button>
+    </a>
+</div>
+
+<div class="destination-card">
+    <img src="/static/images/kashmir.jpg">
+    <h3>Kashmir</h3>
+    <a href="/hotels?place=Kashmir">
+        <button>Select</button>
+    </a>
+</div>
+
+<div class="destination-card">
+    <img src="/static/images/jaipur.jpg">
+    <h3>Jaipur</h3>
+    <a href="/hotels?place=Jaipur">
+        <button>Select</button>
+    </a>
+</div> {% endcomment %}
+{% comment %} </div>
+
+</section> {% endcomment %}
+
+<!-- CTA -->
+
+{% comment %} <section class="cta">
+
+<h2>Start Planning Your Dream Trip Today</h2>
+
+<a href="/plan_trip1">
+    <button>Plan My Trip</button>
+    </a>
+
+</section> {% endcomment %}
+<section style="padding:60px 10%; background:#f9fbff;">
+
+    <h2 style="text-align:center; margin-bottom:40px;">What Our Users Say ⭐</h2>
+    <p>Total Feedback: {{ feedbacks|length }}</p>
+    
+    <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:25px;">
+    
+    {% for f in feedbacks %}
+    
+    <div style="background:white; padding:20px; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+    
+        <!-- USER IMAGE -->
+        {% if f.user.userprofile.photo %}
+            <img src="{{ f.user.userprofile.photo.url }}" width="60" height="60" style="border-radius:50%;">
+        {% else %}
+            <img src="/static/images/default-user.png" width="60" height="60" style="border-radius:50%;">
+        {% endif %}
+    
+        <!-- NAME -->
+        <h4 style="margin:10px 0;">{{ f.user.username }}</h4>
+    
+        <!-- RATING -->
+        <p>
+            {% for i in "12345" %}
+                {% if forloop.counter <= f.rating %}
+                    ⭐
+                {% else %}
+                    ☆
+                {% endif %}
+            {% endfor %}
+        </p>
+    
+        <!-- MESSAGE -->
+        <p>"{{ f.message }}"</p>
+    
+    </div>
+    
+    {% endfor %}
+    
+    </div>
+    
+    </section>
+<!-- Footer -->
+
+<footer>
+
+{% comment %} <div>
+<h3>Smart Trip Planner</h3>
+<p>Your AI travel assistant</p>
+</div> {% endcomment %}
+
+<div>
+<h4>Quick Links</h4>
+<a href="#">Home</a>
+<a href="/destinations">Destinations</a>
+
+</div>
+
+<div>
+<h4>Contact</h4>
+<p>Email: 
+    info@tripplanner.com</p>
+<p>Phone: +91 9876543210</p>
+<p>Address: Vishrambag Sangli </p>
+</div>
+
+</footer>
+
+</body>
+</html>

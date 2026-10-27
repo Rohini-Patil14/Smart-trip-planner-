@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>How It Works - Smart Trip Planner</title>
+
+    <style>
+        body{
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #eef2f3, #dfe9f3);
+            margin:0;
+        }
+
+        h1{
+            text-align:center;
+            padding:20px;
+            color:#0f4c75;
+        }
+
+        .steps{
+            width:90%;
+            max-width:1000px;
+            margin:auto;
+        }
+
+        .step{
+            background:white;
+            margin:20px 0;
+            padding:20px;
+            border-radius:10px;
+            box-shadow:0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .step h3{
+            color:#3282b8;
+        }
+
+        .step p{
+            color:#555;
+        }
+    </style>
+</head>
+<body>
+
+<h1>How Smart Trip Planner Works </h1>
+
+<div class="steps">
+
+    <div class="step">
+        <h3>Step 1: User Registration/Login</h3>
+        <p>User creates an account or logs in to access trip planning features.</p>
+    </div>
+
+    <div class="step">
+        <h3>Step 2: Enter Trip Details</h3>
+        <p>User enters source, destination, travel dates, and preferences.</p>
+    </div>
+
+    <div class="step">
+        <h3>Step 3: Select Destination & Hotels</h3>
+        <p>System suggests destinations and available hotels based on user input.</p>
+    </div>
+
+    <div class="step">
+        <h3>Step 4: Choose Vehicle</h3>
+        <p>User selects vehicle type (car, rikshaw, group travel, etc.) with details and pricing.</p>
+    </div>
+
+    <div class="step">
+        <h3>Step 5: Booking Confirmation</h3>
+        <p>User confirms booking and system calculates total amount.</p>
+    </div>
+
+    {% comment %} <div class="step">
+        <h3>Step 6: Invoice Generation</h3>
+        <p>System generates invoice with all trip details using stored booking data.</p>
+    </div> {% endcomment %}
+
+    <div class="step">
+        <h3>Step 6: Feedback</h3>
+        <p>User completes trip and can provide feedback and ratings.</p>
+    </div>
+
+</div>
+
+</body>
+</html>

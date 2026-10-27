@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        body{
+            margin:0;
+            font-family:Arial;
+            display:flex;
+            background:#f5f7fb;
+        }
+
+        .sidebar{
+            width:220px;
+            height:100vh;
+            background:#0f4c75;
+            color:white;
+            padding-top:20px;
+            position:fixed;
+        }
+
+        .sidebar h2{
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+        .sidebar a{
+            display:block;
+            color:white;
+            text-decoration:none;
+            padding:15px;
+        }
+
+        .sidebar a:hover{
+            background:#3282b8;
+        }
+
+        .submenu{
+            display:none;
+            background:#1b5f8a;
+        }
+
+        .submenu a{
+            padding-left:35px;
+            font-size:14px;
+        }
+
+        .main{
+            margin-left:220px;
+            width:100%;
+        }
+        
+    </style>
+</head>
+
+<body>
+
+<!-- ✅ SIDEBAR (COMMON) -->
+<!-- SIDEBAR -->
+<div class="sidebar">
+    {% comment %} <h2>Admin</h2> {% endcomment %}
+    <h2><a style="align:center">Smart Trip Planner</a></h2>
+    <a href="/admin-panel"><i class="fa fa-home"></i> Dashboard</a>
+    <div class="menu-item">
+        <a href="javascript:void(0);" onclick="toggleMenu()">
+            <i class="fa fa-map"></i> Manage Destinations ▾
+        </a>
+    
+        <div class="submenu" id="destMenu">
+            <a href="/add-destination/"><i class="fa fa-plus"></i> Add Destination</a>
+            <a href="/view-destinations/"><i class="fa fa-eye"></i> View Destinations</a>
+        </div>
+    </div>
+    <div class="menu-item">
+        <a href="javascript:void(0);" onclick="toggleHotelMenu()">
+            <i class="fa fa-hotel"></i> Manage Hotels ▾
+        </a>
+    
+        <div class="submenu" id="hotelMenu">
+            <a href="/add-hotel/"><i class="fa fa-plus"></i> Add Hotel</a>
+            <a href="/view-hotels/"><i class="fa fa-eye"></i> View Hotels</a>
+        </div>
+    </div><div class="menu-item">
+        <a href="javascript:void(0);" onclick="toggleVehicleMenu()">
+            <i class="fa fa-car"></i> Manage Vehicles ▾
+        </a>
+    
+        <div class="submenu" id="vehicleMenu">
+            <a href="/add-vehicle/"><i class="fa fa-plus"></i> Add Vehicle</a>
+            <a href="/view-vehicles/"><i class="fa fa-eye"></i> View Vehicles</a>
+        </div>
+    </div>
+    <a href="/view-feedback/"><i class="fa fa-comments"></i> Manage Feedback</a>
+    <div class="menu-item">
+        <a href="javascript:void(0);" onclick="toggleUserMenu()">
+            <i class="fa fa-users"></i> Manage Users ▾
+        </a>
+    
+        <div class="submenu" id="userMenu">
+            <a href="/view-users/"><i class="fa fa-eye"></i> View Users</a>
+        </div>
+    </div>
+    <div class="menu-item">
+        <a href="javascript:void(0);" onclick="toggleReportMenu()">
+            <i class="fa fa-chart-bar"></i> Reports ▾
+        </a>
+    
+        <div class="submenu" id="reportMenu">
+            
+            <a href="/user-report/">
+                <i class="fa fa-users"></i> User Report
+            </a>
+            <a href="/booking-report/">
+                <i class="fa fa-file"></i> Booking Report
+            </a>
+            <a href="/vehicle-booking-report/">
+                <i class="fa fa-car"></i> Vehicle Booking Report
+            </a>
+            <a href="/hotel-report/">
+                <i class="fa fa-hotel"></i> Hotel Report
+            </a>
+            <a href="/destination-report/">
+                <i class="fa fa-map-marker-alt"></i> Destination Report
+            </a>
+            <a href="/feedback-report/">
+                <i class="fa fa-comments"></i> Feedback Report
+            </a>
+        </div>
+    </div>
+    <a href="{% url 'admin_logout' %}">
+        <i class="fa fa-sign-out-alt"></i> Logout
+    </a>
+    
+    <!-- Dark Mode Toggle -->
+    <a href="javascript:void(0);" onclick="toggleDarkMode()">
+        <i class="fa fa-moon"></i> Toggle Dark Mode
+    </a>
+
+</div>
+
+<!-- ✅ PAGE CONTENT WILL COME HERE -->
+<div class="main">
+    {% block content %}{% endblock %}
+</div>
+
+<script>
+    // DARK MODE TOGGLE
+    function toggleDarkMode() {
+        document.body.classList.toggle('dark-mode');
+        // Optional: Save preference in localStorage
+        if(document.body.classList.contains('dark-mode')){
+            localStorage.setItem('darkMode','enabled');
+        } else {
+            localStorage.setItem('darkMode','disabled');
+        }
+    }
+    
+    // Load dark mode preference on page load
+    if(localStorage.getItem('darkMode') === 'enabled'){
+        document.body.classList.add('dark-mode');
+    }
+    </script>
+    <script>
+        function toggleMenu(){
+            var menu = document.getElementById("destMenu");
+            if(menu.style.display === "block"){
+                menu.style.display = "none";
+            } else {
+                menu.style.display = "block";
+            }
+        }
+        </script>
+<script>
+function toggleMenu(){
+    var menu = document.getElementById("destMenu");
+    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+}
+</script>
+<script>
+    function toggleHotelMenu(){
+        var menu = document.getElementById("hotelMenu");
+        menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+    </script>
+    <script>
+        function toggleVehicleMenu(){
+            var menu = document.getElementById("vehicleMenu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+        </script>
+        <script>
+            function toggleUserMenu(){
+                var menu = document.getElementById("userMenu");
+                menu.style.display = (menu.style.display === "block") ? "none" : "block";
+            }
+            </script>
+            <script>
+                function toggleReportMenu(){
+                    var menu = document.getElementById("reportMenu");
+                    menu.style.display = (menu.style.display === "block") ? "none" : "block";
+                }
+                </script>
+</body>
+</html>

@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tourist Places</title>
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:#f5f7fb;
+}
+
+.header{
+background:#0f4c75;
+color:white;
+padding:20px;
+text-align:center;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+padding:40px;
+}
+
+.card{
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+.card img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.card h3{
+padding:15px;
+}
+
+.next-btn{
+text-align:center;
+margin:20px;
+}
+
+.next-btn a{
+background:#ff7b00;
+color:white;
+padding:12px 25px;
+border-radius:5px;
+text-decoration:none;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h2>Top Places in {{ place }}</h2>
+</div>
+
+<div class="grid">
+
+{% for p in places %}
+
+<div class="card">
+<img src="{% static p.img %}">
+<h3>{{ p.name }}</h3>
+</div>
+
+{% empty %}
+
+<p style="text-align:center;">No places found</p>
+
+{% endfor %}
+
+</div>
+
+<div class="next-btn">
+<a href="/hotels?place={{ place }}">Next: Book Hotels</a>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<h2 style="text-align:center; color:#0f4c75;">All Vehicles</h2>
+
+<table style="width:100%; border-collapse:collapse; background:white; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+
+<tr style="background:#0f4c75; color:white;">
+    <th>Name</th>
+    <th>Type</th>
+    <th>Seats</th>
+    <th>Price/KM</th>
+    <th>Image</th>
+    <th>Actions</th>
+</tr>
+
+{% for v in vehicles %}
+<tr style="text-align:center; border-bottom:1px solid #ddd;">
+    <td>{{ v.name }}</td>
+    <td>{{ v.type }}</td>
+    <td>{{ v.seats }}</td>
+    <td>₹{{ v.price_per_km }}</td>
+
+    <td>
+        <img src="{{ v.image.url }}" width="80" height="60" style="border-radius:5px;">
+    </td>
+
+    <td>
+        <a href="{% url 'edit_vehicle' v.id %}" style="background:#3282b8; color:white; padding:6px 10px; border-radius:5px;">Edit</a>
+
+        <a href="{% url 'delete_vehicle' v.id %}" 
+           onclick="return confirm('Delete this vehicle?')"
+           style="background:red; color:white; padding:6px 10px; border-radius:5px;">
+           Delete
+        </a>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

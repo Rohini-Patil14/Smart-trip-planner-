@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Feedback</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#eef3f8;
+}
+
+.container{
+    width:400px;
+    margin:80px auto;
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.2);
+}
+
+h2{text-align:center;}
+
+input, textarea{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    border-radius:5px;
+    border:1px solid #ccc;
+}
+
+.stars{
+    display:flex;
+    justify-content:center;
+    margin:15px 0;
+}
+
+.stars input{
+    display:none;
+}
+
+.stars label{
+    font-size:25px;
+    color:gray;
+    cursor:pointer;
+}
+
+.stars input:checked ~ label{
+    color:gold;
+}
+
+.btn{
+    width:100%;
+    padding:12px;
+    background:#ff7b00;
+    color:white;
+    border:none;
+    border-radius:5px;
+    margin-top:15px;
+    cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Give Your Feedback ⭐</h2>
+
+<form method="POST">
+{% csrf_token %}
+
+<!-- Auto User Info -->
+<label><b>Name:</b></label>
+<input type="text" value="{{ request.user.username }}" readonly>
+
+<label><b>Email:</b></label>
+<input type="email" value="{{ request.user.email }}" readonly>
+
+<!-- ⭐ Star Rating -->
+<div class="stars">
+    <input type="radio" name="rating" value="5" id="star5"><label for="star5">★</label>
+    <input type="radio" name="rating" value="4" id="star4"><label for="star4">★</label>
+    <input type="radio" name="rating" value="3" id="star3"><label for="star3">★</label>
+    <input type="radio" name="rating" value="2" id="star2"><label for="star2">★</label>
+    <input type="radio" name="rating" value="1" id="star1"><label for="star1">★</label>
+</div>
+
+<!-- Message -->
+<textarea name="message" placeholder="Write your feedback..." required></textarea>
+
+<button class="btn">Submit Feedback</button>
+
+</form>
+
+</div>
+
+</body>
+</html>

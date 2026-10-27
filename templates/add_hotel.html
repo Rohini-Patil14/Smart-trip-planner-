@@ -1,0 +1,79 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<style>
+.center-wrapper{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:80vh;
+}
+
+.form-box{
+    background:white;
+    padding:40px;
+    border-radius:12px;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+    width:350px;
+    text-align:center;
+}
+
+.form-box h2{
+    color:#0f4c75;
+    margin-bottom:20px;
+}
+
+.form-box input,
+.form-box select{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+    border-radius:6px;
+    border:1px solid #ccc;
+}
+
+.form-box button{
+    width:100%;
+    padding:10px;
+    background:#0f4c75;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.form-box button:hover{
+    background:#3282b8;
+}
+</style>
+
+<div class="center-wrapper">
+
+<div class="form-box">
+
+<h2>Add Hotel</h2>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <label>Select Destination:</label>
+    <select name="destination">
+        {% for d in destinations %}
+            <option value="{{ d.id }}">{{ d.name }}</option>
+        {% endfor %}
+    </select>
+
+    <input type="text" name="name" placeholder="Hotel Name">
+    <input type="number" name="total_rooms" placeholder="Total Rooms">
+    <input type="number" name="price" placeholder="Price">
+    <input type="file" name="image">
+
+    <button type="submit">Add Hotel</button>
+</form>
+
+</div>
+
+</div>
+
+{% endblock %}

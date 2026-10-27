@@ -1,0 +1,85 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<style>
+    .container{
+        width:90%;
+        margin:40px auto;
+    }
+
+    h2{
+        text-align:center;
+        color:#0f4c75;
+    }
+
+    form{
+        text-align:center;
+        margin-bottom:20px;
+    }
+
+    input, button{
+        padding:10px;
+        margin:5px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        background:white;
+        box-shadow:0 5px 10px rgba(0,0,0,0.1);
+    }
+
+    th, td{
+        padding:12px;
+        border-bottom:1px solid #ddd;
+        text-align:center;
+    }
+
+    th{
+        background:#0f4c75;
+        color:white;
+    }
+</style>
+
+<div class="container">
+    <h2>Registered Users Report</h2>
+
+    <!-- FILTER FORM -->
+    <form method="GET">
+        <label>From Date:</label>
+        <input type="date" name="from_date" value="{{ from_date }}">
+
+        <label>To Date:</label>
+        <input type="date" name="to_date" value="{{ to_date }}">
+
+        <button type="submit">Search</button>
+    </form>
+
+    <!-- TABLE -->
+    {% if users %}
+    <table>
+        <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Address</th>
+            <th>Registered Date</th>
+        </tr>
+
+        {% for u in users %}
+        <tr>
+            <td>{{ u.user.username }}</td>
+            <td>{{ u.user.email }}</td>
+            <td>{{ u.phone }}</td>
+            <td>{{ u.address }}</td>
+            <td>{{ u.user.date_joined|date:"d M Y" }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <p style="text-align:center;">No users found ❌</p>
+    {% endif %}
+</div>
+
+{% endblock %}

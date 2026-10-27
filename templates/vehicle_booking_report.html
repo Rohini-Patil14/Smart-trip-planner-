@@ -1,0 +1,88 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<style>
+    body{
+        font-family:Arial;
+        background:#f4f7fb;
+    }
+
+    .container{
+        width:90%;
+        margin:40px auto;
+    }
+
+    h2{
+        text-align:center;
+        color:#0f4c75;
+    }
+
+    form{
+        text-align:center;
+        margin-bottom:20px;
+    }
+
+    input, button{
+        padding:10px;
+        margin:5px;
+    }
+
+    table{
+        width:100%;
+        border-collapse:collapse;
+        background:white;
+    }
+
+    th, td{
+        padding:12px;
+        border-bottom:1px solid #ddd;
+        text-align:center;
+    }
+
+    th{
+        background:#0f4c75;
+        color:white;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Vehicle Booking Report</h2>
+
+<!-- FILTER -->
+<form method="GET">
+    <input type="date" name="from_date" value="{{ from_date }}">
+    <input type="date" name="to_date" value="{{ to_date }}">
+    <button type="submit">Search</button>
+</form>
+
+<!-- TABLE -->
+{% if report %}
+<table>
+    <tr>
+        <th>Vehicle Name</th>
+        <th>Type</th>
+        <th>Total Bookings</th>
+        <th>Total Earnings</th>
+    </tr>
+
+    {% for r in report %}
+    <tr>
+        <td>{{ r.vehicle__name }}</td>
+        <td>{{ r.vehicle__type }}</td>
+        <td>{{ r.total_bookings }}</td>
+        <td>₹{{ r.total_earning }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+    <p style="text-align:center;">No data found ❌</p>
+{% endif %}
+
+</div>
+
+{% endblock %}

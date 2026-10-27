@@ -1,0 +1,239 @@
+ <!DOCTYPE html>
+<html>
+<head>
+<title>Destinations</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+
+body{font-family:Arial;margin:0;background:#f5f7fb}
+
+.header{
+background:#0f4c75;
+color:white;
+padding:15px;
+text-align:center;
+}
+
+.destination-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:25px;
+padding:50px;
+}
+
+.card{
+background:white;
+border-radius:10px;
+overflow:hidden;
+box-shadow:0 4px 10px rgba(0,0,0,0.1);
+}
+
+.card img{
+width:100%;
+height:180px;
+object-fit:cover;
+}
+
+.card h3{
+padding:15px;
+}
+.search-box{
+    text-align:center;
+    margin:20px;
+    }
+    
+    .search-box input{
+    width:300px;
+    padding:10px;
+    border-radius:5px;
+    border:1px solid #ccc;
+    }
+    .filters{
+        text-align:center;
+        margin:20px;
+        }
+        
+        .filters select, .filters button{
+        padding:10px;
+        margin:5px;
+        border-radius:5px;
+        }
+</style>
+</head>
+
+<body>
+
+<div class="header">
+<h2>Popular Destinations</h2>
+</div>
+<div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search destination..." onkeyup="searchDestination()">
+</div>
+<div class="filters">
+
+    <select id="budget">
+    <option value="">Budget</option>
+    <option value="2000">Below 2000</option>
+    <option value="3000">Below 3000</option>
+    <option value="5000">Below 5000</option>
+    </select>
+    
+    <select id="rating">
+    <option value="">Rating</option>
+    <option value="4">4+ Stars</option>
+    <option value="4.5">4.5+ Stars</option>
+    </select>
+    
+    <select id="type">
+    <option value="">Type</option>
+    <option value="beach">Beach</option>
+    <option value="hill">Hill</option>
+    <option value="city">City</option>
+    </select>
+    
+    <button onclick="filterData()">Apply</button>
+    
+    </div>
+<div class="destination-grid">
+{% comment %}
+<div class="card">
+<img src="/static/images/goa.jpg">
+<h3>Goa</h3>
+</div>
+
+<div class="card">
+<img src="/static/images/manali.jpg">
+<h3>Manali</h3>
+</div>
+
+<div class="card">
+<img src="/static/images/kashmir.jpg">
+<h3>Kashmir</h3>
+</div>
+
+<div class="card">
+<img src="/static/images/jaipur.jpg">
+<h3>Jaipur</h3>
+</div>
+
+</div>
+
+</body>
+</html> {% endcomment %}
+
+<div class="card">
+    <img src="/static/images/goa.jpg">
+    <h3>Goa</h3>
+    
+    <a href="/places?place=Goa">
+        <button style="margin:10px;">Explore</button>
+    </a>
+    
+    </div>
+    
+    <div class="card">
+    <img src="/static/images/manali.jpg">
+    <h3>Manali</h3>
+    
+    <a href="/places?place=Manali">
+        <button style="margin:10px;">Explore</button>
+    </a>
+    
+    </div>
+    
+    <div class="card">
+    <img src="/static/images/kashmir.jpg">
+    <h3>Kashmir</h3>
+    
+    <a href="/places?place=Kashmir">
+        <button style="margin:10px;">Explore</button>
+    </a>
+    
+    </div>
+    
+    <div class="card">
+    <img src="/static/images/jaipur.jpg">
+    <h3>Jaipur</h3>
+    
+    <a href="/places?place=Jaipur">
+        <button style="margin:10px;">Explore</button>
+    </a>
+    
+    </div>
+    <div class="card" data-budget="3000" data-rating="4.5" data-type="beach">
+        <img src="/static/images/goa.jpg">
+        <h3>Goa</h3>
+        <p>₹3000 | ⭐ 4.5 | Beach</p>
+        </div>
+        
+        <div class="card" data-budget="2500" data-rating="4.2" data-type="hill">
+        <img src="/static/images/manali.jpg">
+        <h3>Manali</h3>
+        <p>₹2500 | ⭐ 4.2 | Hill</p>
+        </div>
+        
+        <div class="card" data-budget="4000" data-rating="4.8" data-type="hill">
+        <img src="/static/images/kashmir.jpg">
+        <h3>Kashmir</h3>
+        <p>₹4000 | ⭐ 4.8 | Hill</p>
+        </div>
+        
+        <div class="card" data-budget="2800" data-rating="4.3" data-type="city">
+        <img src="/static/images/jaipur.jpg">
+        <h3>Jaipur</h3>
+        <p>₹2800 | ⭐ 4.3 | City</p>
+        </div> 
+        
+    <script>
+        function searchDestination(){
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let cards = document.getElementsByClassName("card");
+        
+            for(let i=0; i<cards.length; i++){
+                let title = cards[i].getElementsByTagName("h3")[0].innerText.toLowerCase();
+        
+                if(title.includes(input)){
+                    cards[i].style.display = "block";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+        </script>
+
+        <script>
+            function filterData(){
+            
+                let budget = document.getElementById("budget").value;
+                let rating = document.getElementById("rating").value;
+                let type = document.getElementById("type").value;
+            
+                let cards = document.getElementsByClassName("card");
+            
+                for(let i=0; i<cards.length; i++){
+            
+                    let cBudget = cards[i].getAttribute("data-budget");
+                    let cRating = cards[i].getAttribute("data-rating");
+                    let cType = cards[i].getAttribute("data-type");
+            
+                    let show = true;
+            
+                    // Budget filter
+                    if(budget && parseInt(cBudget) > parseInt(budget)){
+                        show = false;
+                    }
+            
+                    // Rating filter
+                    if(rating && parseFloat(cRating) < parseFloat(rating)){
+                        show = false;
+                    }
+            
+                    // Type filter
+                    if(type && cType !== type){
+                        show = false;
+                    }
+            
+                    cards[i].style.display = show ? "block" : "none";
+                }
+            }
+            </script>

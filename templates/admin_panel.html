@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Admin Dashboard</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+
+body{
+    margin:0;
+    font-family:Arial;
+    display:flex;
+    background:#f5f7fb;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* SIDEBAR */
+.sidebar{
+    width:220px;
+    height:100vh;
+    background:#0f4c75;
+    color:white;
+    padding-top:20px;
+    position:fixed;
+    transition: background 0.3s;
+}
+
+.sidebar h2{
+    text-align:center;
+    margin-bottom:30px;
+}
+
+.sidebar a{
+    display:block;
+    color:white;
+    text-decoration:none;
+    padding:15px;
+    transition:0.3s;
+}
+
+.sidebar a:hover{
+    background:#3282b8;
+}
+
+.sidebar i{
+    margin-right:10px;
+}
+
+/* MAIN CONTENT */
+.main{
+    margin-left:220px;
+    padding:20px;
+    width:100%;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* HEADER */
+.header{
+    background:white;
+    padding:15px;
+    border-radius:10px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    margin-bottom:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    transition: background 0.3s, color 0.3s;
+}
+
+/* CARDS */
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+    gap:20px;
+}
+
+.card{
+    background:white;
+    padding:25px;
+    border-radius:12px;
+    box-shadow:0 4px 10px rgba(0,0,0,0.1);
+    text-align:center;
+    transition: background 0.3s, color 0.3s;
+}
+
+.card h3{
+    margin:10px 0;
+}
+
+.icon{
+    font-size:30px;
+    color:#ff7b00;
+}
+
+/* BUTTONS */
+.btn{
+    display:inline-block;
+    margin-top:10px;
+    padding:8px 15px;
+    background:#0f4c75;
+    color:white;
+    text-decoration:none;
+    border-radius:5px;
+    transition: background 0.3s;
+}
+
+.btn:hover{
+    background:#3282b8;
+}
+
+/* DARK MODE STYLES */
+body.dark-mode{
+    background:#121212;
+    color:#e0e0e0;
+}
+
+body.dark-mode .sidebar{
+    background:#1b1b1b;
+}
+
+body.dark-mode .sidebar a:hover{
+    background:#333333;
+}
+
+body.dark-mode .main{
+    background:#181818;
+}
+
+body.dark-mode .header{
+    background:#242424;
+    color:#e0e0e0;
+}
+
+body.dark-mode .card{
+    background:#242424;
+    color:#e0e0e0;
+}
+
+body.dark-mode .btn{
+    background:#333;
+    color:white;
+}
+
+body.dark-mode .btn:hover{
+    background:#555;
+}
+.menu-item{
+    display:block;
+}
+
+.submenu{
+    display:none;
+    background:#1b5f8a;
+}
+
+.submenu a{
+    padding-left:35px;
+    font-size:14px;
+}
+
+.submenu a:hover{
+    background:#3282b8;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>Admin</h2>
+
+    <a href="/admin-panel"><i class="fa fa-home"></i> Dashboard</a>
+    <div class="menu-item">
+        <a href="javascript:void(0);" onclick="toggleMenu()">
+            <i class="fa fa-map"></i>Manage Destinations▾
+        </a>
+    
+        <div class="submenu" id="destMenu">
+            <a href="/add-destination/"><i class="fa fa-plus"></i> Add Destination</a>
+            <a href="/view-destinations/"><i class="fa fa-eye"></i> View Destinations</a>
+        </div>
+    </div>
+    <div class="menu-item">
+        <a href="javascript:void(0);" onclick="toggleHotelMenu()">
+            <i class="fa fa-hotel"></i> Manage Hotels ▾
+        </a>
+    
+        <div class="submenu" id="hotelMenu">
+            <a href="/add-hotel/"><i class="fa fa-plus"></i> Add Hotel</a>
+            <a href="/view-hotels/"><i class="fa fa-eye"></i> View Hotels</a>
+        </div>
+    </div><div class="menu-item">
+        <a href="javascript:void(0);" onclick="toggleVehicleMenu()">
+            <i class="fa fa-car"></i> Manage Vehicles ▾
+        </a>
+    
+        <div class="submenu" id="vehicleMenu">
+            <a href="/add-vehicle/"><i class="fa fa-plus"></i> Add Vehicle</a>
+            <a href="/view-vehicles/"><i class="fa fa-eye"></i> View Vehicles</a>
+        </div>
+    </div>
+    <a href="/view-feedback/"><i class="fa fa-comments"></i> Manage Feedback</a>
+    <div class="menu-item">
+        <a href="javascript:void(0);" onclick="toggleUserMenu()">
+            <i class="fa fa-users"></i> Manage Users ▾
+        </a>
+    
+        <div class="submenu" id="userMenu">
+            <a href="/view-users/"><i class="fa fa-eye"></i> View Users</a>
+        </div>
+    </div>
+    <a href="#"><i class="fa fa-chart-bar"></i> Reports</a>
+    <a href="{% url 'admin_logout' %}">
+        <i class="fa fa-sign-out-alt"></i> Logout
+    </a>
+    
+    <!-- Dark Mode Toggle -->
+    <a href="javascript:void(0);" onclick="toggleDarkMode()">
+        <i class="fa fa-moon"></i> Toggle Dark Mode
+    </a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h2>Dashboard</h2>
+        <p>Welcome Admin 👋</p>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="cards">
+
+        <div class="card">
+            <i class="fa fa-map-marker-alt icon"></i>
+            <h3>{{ total_destinations }}</h3>
+            <p>Total Destinations</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-comments icon"></i>
+            <h3>{{ total_feedback }}</h3>
+            <p>Total Feedback</p>
+        </div>
+
+        <div class="card">
+            <i class="fa fa-star icon"></i>
+            <h3>{{ avg_rating }}</h3>
+            <p>Average Rating</p>
+        </div>
+
+    </div>
+<!-- RECENT BOOKINGS -->
+<div style="margin-top:30px;">
+
+    <h2 style="color:#0f4c75;">Recent Bookings</h2>
+    {% comment %} <a href="/all-bookings/" class="btn" style="margin-top:10px;">View All</a> {% endcomment %}
+    <div style="background:white; border-radius:10px; padding:15px; box-shadow:0 4px 10px rgba(0,0,0,0.1); overflow-x:auto;">
+
+        <table style="width:100%; border-collapse:collapse;">
+
+            <tr style="background:#0f4c75; color:white;">
+                <th style="padding:10px;">User</th>
+                <th style="padding:10px;">Destination</th>
+                <th style="padding:10px;">Vehicle</th>
+                <th style="padding:10px;">From</th>
+                <th style="padding:10px;">To</th>
+                <th style="padding:10px;">Amount</th>
+                <th style="padding:10px;">Status</th>
+            </tr>
+
+            {% for b in recent_bookings %}
+            <tr style="text-align:center; border-bottom:1px solid #ddd;">
+
+                <td style="padding:10px;">{{ b.user.username }}</td>
+                <td style="padding:10px;">{{ b.destination.name }}</td>
+                <td style="padding:10px;">{{ b.vehicle.name }}</td>
+                <td style="padding:10px;">{{ b.v_from }}</td>
+                <td style="padding:10px;">{{ b.v_to }}</td>
+                <td style="padding:10px;">₹{{ b.total_amount }}</td>
+
+                <td style="padding:10px;">
+                    {% if b.status == "booked" %}
+                        <span style="color:green; font-weight:bold;">Booked</span>
+                    {% else %}
+                        <span style="color:red; font-weight:bold;">Cancelled</span>
+                    {% endif %}
+                </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="7" style="padding:15px; text-align:center;">No bookings yet</td>
+            </tr>
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+</div>
+</div>
+
+<script>
+// DARK MODE TOGGLE
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+    // Optional: Save preference in localStorage
+    if(document.body.classList.contains('dark-mode')){
+        localStorage.setItem('darkMode','enabled');
+    } else {
+        localStorage.setItem('darkMode','disabled');
+    }
+}
+
+// Load dark mode preference on page load
+if(localStorage.getItem('darkMode') === 'enabled'){
+    document.body.classList.add('dark-mode');
+}
+</script>
+<script>
+    function toggleMenu(){
+        var menu = document.getElementById("destMenu");
+        if(menu.style.display === "block"){
+            menu.style.display = "none";
+        } else {
+            menu.style.display = "block";
+        }
+    }
+    </script>
+    <script>
+        function toggleUserMenu(){
+            var menu = document.getElementById("userMenu");
+            menu.style.display = (menu.style.display === "block") ? "none" : "block";
+        }
+        </script>
+</body>
+</html>

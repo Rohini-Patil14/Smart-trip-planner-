@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Summary</title>
+
+    <style>
+        body{
+            font-family:'Segoe UI', sans-serif;
+            background: linear-gradient(to right, #eef2f3, #dfe9f3);
+            margin:0;
+            padding:0;
+        }
+
+        .container{
+            width:90%;
+            max-width:800px;
+            margin:40px auto;
+            background:white;
+            padding:25px;
+            border-radius:12px;
+            box-shadow:0 8px 20px rgba(0,0,0,0.1);
+        }
+
+        h2{
+            text-align:center;
+            color:#0f4c75;
+            margin-bottom:20px;
+        }
+
+        h3{
+            color:#3282b8;
+            margin-top:20px;
+        }
+
+        .section{
+            background:#f8f9fa;
+            padding:15px;
+            border-radius:10px;
+            margin-bottom:15px;
+        }
+
+        .section p{
+            margin:8px 0;
+            color:#333;
+        }
+
+        hr{
+            border:none;
+            height:1px;
+            background:#ddd;
+            margin:20px 0;
+        }
+
+        .highlight{
+            font-size:18px;
+            font-weight:bold;
+            color:#27ae60;
+        }
+
+        select{
+            width:100%;
+            padding:10px;
+            border-radius:6px;
+            border:1px solid #ccc;
+            margin-top:10px;
+        }
+
+        button{
+            width:100%;
+            padding:12px;
+            background:#27ae60;
+            color:white;
+            border:none;
+            border-radius:6px;
+            font-size:16px;
+            cursor:pointer;
+            margin-top:15px;
+        }
+
+        button:hover{
+            background:#219150;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Booking Summary</h2>
+
+<!-- USER DETAILS -->
+<div class="section">
+    <p><b>User Name:</b> {{ request.user.username }}</p>
+    <p><b>Email:</b> {{ request.user.email }}</p>
+</div>
+
+<hr>
+
+<div class="section">
+    <p><b>Destination:</b> {{ destination.name }}</p>
+
+    <p><b>Vehicle:</b>
+    {% if vehicle %}
+        {{ vehicle.name }}
+    {% else %}
+        Not Selected
+    {% endif %}
+    </p>
+
+    <p><b>Hotel:</b>
+    {% if hotel %}
+        {{ hotel.name }}
+    {% else %}
+        Not Selected
+    {% endif %}
+    </p>
+
+    <p><b>Rooms Booked:</b>
+    {% if hotel %}
+        {{ rooms }}
+    {% else %}
+        0
+    {% endif %}
+    </p>
+
+    <p><b>Days:</b> {{ days }}</p>
+</div>
+
+<hr>
+
+<div class="section">
+    <p><b>Vehicle Cost:</b> ₹{{ vehicle_cost }}</p>
+    <p><b>Hotel Cost:</b> ₹{{ hotel_cost }}</p>
+
+    <p class="highlight">Total: ₹{{ total }}</p>
+</div>
+
+<hr>
+
+<!-- PAYMENT OPTION -->
+<h3>Payment Method</h3>
+
+<form method="POST" action="/confirm-booking/">
+    {% csrf_token %}
+    <input type="hidden" name="dest_id" value="{{ destination.id }}">
+    <input type="hidden" name="vehicle_id" value="{{ vehicle.id }}">
+    <input type="hidden" name="hotel_id" value="{{ hotel.id }}">
+    <input type="hidden" name="v_from" value="{{ v_from }}">
+    <input type="hidden" name="v_to" value="{{ v_to }}">
+    <input type="hidden" name="rooms" value="{{ rooms }}">
+    <input type="hidden" name="total_amount" value="{{ total }}">
+
+    <select name="payment_method" required>
+        <option value="">Select Payment</option>
+        <option value="cash">Cash</option>
+        <option value="upi">UPI</option>
+        <option value="card">Card</option>
+    </select>
+
+    <button type="submit">
+        Confirm Booking
+    </button>
+</form>
+
+</div>
+
+</body>
+</html>

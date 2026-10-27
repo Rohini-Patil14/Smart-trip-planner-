@@ -1,0 +1,200 @@
+<h2 style="text-align:center;color:#0f4c75;">
+    Select Hotel
+</h2>
+
+<!-- DATE PICKER -->
+<div style="text-align:center;margin:20px;">
+    <input type="date" id="fromDate">
+    <input type="date" id="toDate">
+
+    <button onclick="applyDates()">Apply Dates</button>
+</div>
+
+<!-- HOTEL GRID -->
+<div class="container">
+
+{% if hotels %}
+
+    {% for h in hotels %}
+    <div class="card">
+
+        {% if h.image %}
+            <img src="{{ h.image.url }}">
+        {% else %}
+            <img src="https://via.placeholder.com/300x180">
+        {% endif %}
+
+        <div class="content">
+            <h3>{{ h.name }}</h3>
+
+            <p><b>Price:</b> ₹{{ h.price }} / day</p>
+
+<p style="color:green;">
+    Available Rooms: {{ h.remaining_rooms }}
+</p>
+
+<!-- ROOM SELECT -->
+<select id="rooms_{{ h.id }}">
+    {% for i in "12345"|make_list %}
+        {% if forloop.counter <= h.remaining_rooms %}
+            <option value="{{ forloop.counter }}">
+                {{ forloop.counter }} Room
+            </option>
+        {% endif %}
+    {% endfor %}
+</select>
+
+<button class="btn" onclick="goBooking({{ h.id }})">
+    Select Hotel
+</button>
+        </div>
+
+    </div>
+    {% endfor %}
+
+{% else %}
+    <h3 style="text-align:center;color:red;">No Hotels Found ❌</h3>
+{% endif %}
+
+</div>
+
+<!-- SKIP BUTTON -->
+<div style="text-align:center;margin:30px;">
+    <button class="skip" onclick="skipHotel()">
+        Skip Hotel →
+    </button>
+</div>
+
+<!-- CSS -->
+<style>
+body{
+    font-family:Arial;
+    background:#f5f7fb;
+}
+
+.container{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+    padding:30px;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    transition:0.3s;
+}
+
+.card:hover{
+    transform:translateY(-5px);
+}
+
+.card img{
+    width:100%;
+    height:180px;
+    object-fit:cover;
+}
+
+.content{
+    padding:15px;
+}
+
+.content h3{
+    margin:0;
+    color:#0f4c75;
+}
+
+.content p{
+    margin:5px 0;
+    font-size:14px;
+}
+
+.btn{
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+    background:#007bff;
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.btn:hover{
+    background:#0056b3;
+}
+
+.skip{
+    padding:12px 20px;
+    background:#dc3545;
+    color:white;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.skip:hover{
+    background:#a71d2a;
+}
+</style>
+
+<!-- JS -->
+<script>
+function applyDates(){
+    let fromDate = document.getElementById("fromDate").value;
+    let toDate = document.getElementById("toDate").value;
+
+    if(!fromDate || !toDate){
+        alert("Please select dates ❌");
+        return;
+    }
+
+    let url = new URL(window.location.href);
+    url.searchParams.set("v_from", fromDate);
+    url.searchParams.set("v_to", toDate);
+
+    window.location.href = url.toString();
+}
+
+// ✅ BOOK HOTEL
+function goBooking(hotelId){
+
+    let url = new URL(window.location.href);
+
+    let destId = url.searchParams.get("dest_id");
+    let vehicleId = url.searchParams.get("vehicle_id");
+    let v_from = url.searchParams.get("v_from");
+    let v_to = url.searchParams.get("v_to");
+
+    let rooms = document.getElementById("rooms_" + hotelId).value;
+
+    if(!v_from || !v_to){
+        alert("Please select dates first ❌");
+        return;
+    }
+
+    window.location.href =
+    `/booking-summary/?dest_id=${destId}&vehicle_id=${vehicleId}&hotel_id=${hotelId}&rooms=${rooms}&v_from=${v_from}&v_to=${v_to}`;
+}
+
+// ✅ SKIP HOTEL
+function skipHotel(){
+
+    let url = new URL(window.location.href);
+
+    let destId = url.searchParams.get("dest_id");
+    let vehicleId = url.searchParams.get("vehicle_id");
+    let v_from = url.searchParams.get("v_from");
+    let v_to = url.searchParams.get("v_to");
+
+    if(!v_from || !v_to){
+        alert("Please select dates first ❌");
+        return;
+    }
+
+    window.location.href =
+    `/booking-summary/?dest_id=${destId}&vehicle_id=${vehicleId}&hotel_id=none&v_from=${v_from}&v_to=${v_to}`;
+}
+</script>

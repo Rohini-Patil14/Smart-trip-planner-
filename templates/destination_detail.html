@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Destination Detail</title>
+
+    <style>
+        body{
+            margin:0;
+            font-family:Arial;
+            background:#f5f7fb;
+        }
+        
+        /* ✅ BIG CONTAINER FIX */
+        .container{
+            width:95%;
+            max-width:1400px;   /* 🔥 increased from 900 */
+            margin:20px auto;
+            background:white;
+            border-radius:15px;
+            padding:25px;
+            box-shadow:0 8px 25px rgba(0,0,0,0.1);
+        }
+        
+        /* TITLE BIGGER */
+        h2{
+            font-size:34px;   /* 🔥 bigger */
+            text-align:center;
+            color:#0f4c75;
+            margin:10px 0;
+        }
+        
+        /* PLACES SECTION */
+        .places-section h2{
+            font-size:24px;
+        }
+        
+        .places-container{
+            display:flex;
+            gap:15px;
+            flex-wrap:wrap;
+            justify-content:center;
+        }
+        
+        .place-card{
+            background:#eef6ff;
+            padding:14px 18px;
+            border-radius:10px;
+            font-size:16px;   /* 🔥 bigger text */
+        }
+        
+        /* IMAGE BIG FIX */
+        .images{
+            display:flex;
+            gap:15px;
+            justify-content:center;
+            margin:20px 0;
+        }
+        
+        .images img{
+            width:320px;     /* 🔥 bigger */
+            height:220px;
+            object-fit:cover;
+            border-radius:12px;
+        }
+        
+        /* DESCRIPTION BIGGER */
+        p{
+            font-size:16px;
+            text-align:center;
+            margin:10px 0;
+        }
+        
+        /* BUTTON BIGGER */
+        button{
+            width:100%;
+            padding:14px;
+            background:#0f4c75;
+            color:white;
+            border:none;
+            border-radius:10px;
+            font-size:18px;
+            cursor:pointer;
+        }
+        
+        button:hover{
+            background:#3282b8;
+        }
+        
+        /* LOGIN */
+        .top{
+            text-align:right;
+            font-size:16px;
+        }
+        </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <!-- LOGIN -->
+    <div class="top">
+        {% if user.is_authenticated %}
+            👋 {{ user.username }}
+        {% else %}
+            <a href="/ulogin">Login</a>
+        {% endif %}
+    </div>
+
+    <!-- TITLE -->
+    <h2>{{ d.name }}</h2>
+
+    <!-- PLACES -->
+    <div class="places-section">
+        <h2>Places</h2>
+
+        <div class="places-container">
+            {% for p in places %}
+            <div class="place-card">
+                📍 {{ p.place_name }}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- IMAGES -->
+    <div class="images">
+        {% for img in d.images.all %}
+            <img src="{{ img.image.url }}">
+        {% endfor %}
+    </div>
+
+    <!-- DESCRIPTION -->
+    <p style="font-size:20px;text-align:center;">
+        {{ d.description|truncatechars:120 }}
+    </p>
+
+    <!-- BUTTON -->
+    <a href="{% url 'vehicle_list' d.id %}">
+        <button>Book Vehicle →</button>
+    </a>
+
+</div>
+
+</body>
+</html>

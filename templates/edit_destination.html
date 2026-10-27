@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Edit Destination</title>
+
+<style>
+body{
+    font-family:Arial;
+    background:#f5f7fb;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+
+form{
+    background:white;
+    padding:30px;
+    border-radius:10px;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+}
+
+input, textarea, select{
+    width:100%;
+    padding:10px;
+    margin:10px 0;
+}
+
+button{
+    background:#0f4c75;
+    color:white;
+    padding:10px;
+    border:none;
+}
+</style>
+
+</head>
+
+<body>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <input type="text" name="name" value="{{ d.name }}">
+        <textarea name="description">{{ d.description }}</textarea>
+        <input type="number" name="distance" value="{{ d.distance }}">
+        
+        <select name="type">
+            <option value="beach" {% if d.type == 'beach' %}selected{% endif %}>Beach</option>
+            <option value="city" {% if d.type == 'city' %}selected{% endif %}>City</option>
+            <option value="hill" {% if d.type == 'hill' %}selected{% endif %}>Hill</option>
+        </select>
+        
+        <!-- ✅ SHOW EXISTING IMAGES -->
+        <h4>Current Images:</h4>
+        {% for img in d.images.all %}
+            <img src="{{ img.image.url }}" width="120" style="margin:5px;">
+        {% empty %}
+            <p>No images available</p>
+        {% endfor %}
+        
+        <!-- ✅ Upload Images -->
+        <input type="file" name="images" multiple>
+        
+        <button type="submit">Update</button>
+        
+        </form>
+
+</body>
+</html>

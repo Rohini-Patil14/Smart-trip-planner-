@@ -1,0 +1,19 @@
+#Environments files and secret
+.env 
+.env.*
+
+#python cache
+__pycache__/
+*.py[cod]
+
+#virtual environments
+venz/
+.venz/
+env
+
+#local database
+db.sqlite3
+
+#private uploaded files
+media/
+static/

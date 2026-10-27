@@ -1,0 +1,92 @@
+{% extends 'admin_base.html' %}
+
+{% block content %}
+
+<style>
+    body {
+        font-family: Arial;
+        background: #f4f7fb;
+    }
+
+    .container {
+        width: 90%;
+        margin: 40px auto;
+    }
+
+    h2 {
+        text-align: center;
+        color: #0f4c75;
+    }
+
+    .avg {
+        text-align: center;
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background: white;
+        box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+    }
+
+    th, td {
+        padding: 12px;
+        border-bottom: 1px solid #ddd;
+        text-align: center;
+    }
+
+    th {
+        background: #0f4c75;
+        color: white;
+    }
+
+    tr:hover {
+        background: #f1f1f1;
+    }
+
+    .stars {
+        color: gold;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<h2>Feedback Report</h2>
+
+<div class="avg">
+    ⭐ Average Rating: {{ avg_rating|floatformat:1 }}
+</div>
+
+<table>
+    <tr>
+        <th>User</th>
+        <th>Rating</th>
+        <th>Message</th>
+        <th>Date</th>
+    </tr>
+
+    {% for f in feedbacks %}
+    <tr>
+        <td>{{ f.user.username }}</td>
+        <td class="stars">
+            {% for i in "12345" %}
+                {% if forloop.counter <= f.rating %}
+                    ★
+                {% else %}
+                    ☆
+                {% endif %}
+            {% endfor %}
+        </td>
+        <td>{{ f.message }}</td>
+        <td>{{ f.created_at|date:"d M Y" }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+
+</div>
+{% endblock %}
